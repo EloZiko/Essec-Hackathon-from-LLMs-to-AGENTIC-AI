@@ -1,0 +1,438 @@
+/* styles/Home.module.css */
+.container {
+  min-height: 100vh;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.main {
+  width: 100%;
+  padding: 2rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--header-color);
+}
+
+.header h1 {
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  background: linear-gradient(to right, var(--primary-color), #3b9dff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0px 2px 10px rgba(26, 127, 250, 0.2);
+}
+
+.header p {
+  font-weight: 300;
+  color: #bbb;
+}
+
+/* Search state */
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  flex: 1;
+}
+
+.searchForm {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 2rem;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.inputWrapper:hover {
+  border-color: rgba(26, 127, 250, 0.3);
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--primary-color);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 1.2rem 1rem 1.2rem 3rem;
+  border: none;
+  font-size: 1.1rem;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+.searchInput::placeholder {
+  color: #888;
+  font-weight: 300;
+}
+
+.inputWrapper button {
+  padding: 1rem 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.inputWrapper button:hover {
+  background-color: var(--primary-light);
+}
+
+.searchHint {
+  margin-top: 2rem;
+  text-align: center;
+  color: #888;
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* Swipe state */
+.swipeContainer {
+  width: 100%;
+  height: 580px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.swipeProgress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary-color), #3b9dff);
+  transition: width 0.3s ease;
+  z-index: 10;
+}
+
+.swipeCounter {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 0.3rem 0.7rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  z-index: 10;
+  font-weight: 500;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.card {
+  position: absolute;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px var(--card-shadow);
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cardImage {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+
+.cardGradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+}
+
+.cardContent {
+  padding: 1.5rem;
+}
+
+.cardContent h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+  color: var(--text-color);
+}
+
+.location {
+  color: #bbb;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  font-weight: 300;
+}
+
+.description {
+  margin-bottom: 0;
+  line-height: 1.6;
+  color: var(--text-color);
+  font-weight: 300;
+  font-size: 0.95rem;
+}
+
+.swipeInstruction {
+  text-align: center;
+  padding: 0.75rem;
+  color: #aaa;
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  font-weight: 300;
+}
+
+.swipeButtons {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 2rem;
+}
+
+.dislikeBtn, .likeBtn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dislikeBtn:hover, .likeBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px var(--card-shadow);
+}
+
+.dislikeBtn {
+  background-color: var(--secondary-color);
+  color: #ff3b30;
+}
+
+.likeBtn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Results state */
+.resultsContainer {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.resultsHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.75rem;
+}
+
+.resultsHeader h2 {
+  color: var(--text-color);
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.resultsCheck {
+  margin-left: 1rem;
+  width: 30px;
+  height: 30px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.likedGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.likedCard {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px var(--card-shadow);
+  background-color: var(--card-bg);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.likedCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--card-shadow);
+  border-color: rgba(26, 127, 250, 0.3);
+}
+
+.likedImg {
+  width: 100%;
+  height: 180px;
+  position: relative;
+}
+
+.likedBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--primary-color);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.likedContent {
+  padding: 1.25rem;
+}
+
+.likedContent h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  color: var(--text-color);
+}
+
+.noLikes {
+  text-align: center;
+  color: #aaa;
+  padding: 3rem 0;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.newSearchBtn {
+  display: block;
+  margin: 2rem auto;
+  padding: 0.9rem 2rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 108, 228, 0.4);
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+}
+
+.newSearchBtn:hover {
+  background-color: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 108, 228, 0.5);
+}
+
+/* Ajout d'un badge de prix inspiré de Booking */
+.priceBadge {
+  position: absolute;
+  bottom: -15px;
+  right: 15px;
+  background-color: var(--accent-yellow);
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+}
+
+/* Badge de recommandation */
+.recommendBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: var(--accent-blue-light);
+  color: var(--primary-color);
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 5;
+}
+
+@media (max-width: 600px) {
+  .card {
+    max-width: 100%;
+  }
+  
+  .swipeButtons {
+    bottom: 10px;
+  }
+  
+  .likedGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+}

@@ -1,0 +1,46 @@
+:root {
+  /* Variables pour le mode sombre avec accents bleus booking-style */
+  --bg-color: #121212;
+  --text-color: #e8e8e8;
+  --card-bg: #1e1e1e;
+  --card-shadow: rgba(0, 0, 0, 0.4);
+  --primary-color: #006ce4; /* Bleu Booking principal */
+  --primary-light: #1a7ffa; /* Version plus claire pour les hovers */
+  --secondary-color: #2a2a2a;
+  --border-color: #333333;
+  --header-color: #ffffff;
+  --accent-yellow: #feba02; /* Accent jaune de Booking pour certains éléments */
+  --accent-blue-light: #e6f2ff; /* Fond bleu clair pour certains éléments */
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  letter-spacing: 0.2px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+* {
+  box-sizing: border-box;
+}
