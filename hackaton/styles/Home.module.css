@@ -7,6 +7,9 @@
   align-items: center;
   max-width: 800px;
   margin: 0 auto;
+  background: transparent;
+  position: relative;
+  z-index: 2;
 }
 
 .main {
@@ -21,21 +24,23 @@
   text-align: center;
   margin-bottom: 2rem;
   color: var(--header-color);
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 .header h1 {
   margin-bottom: 0.5rem;
   font-size: 2.5rem;
-  background: linear-gradient(to right, var(--primary-color), #3b9dff);
+  background: linear-gradient(to right, #ffffff, #bfdeff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  text-shadow: 0px 2px 10px rgba(26, 127, 250, 0.2);
+  text-shadow: 0px 2px 15px rgba(0, 0, 0, 0.5);
 }
 
 .header p {
   font-weight: 300;
-  color: #bbb;
+  color: #d4e6ff;
+  text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* Search state */
@@ -59,13 +64,13 @@
   width: 100%;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  border: 2px solid transparent;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
 }
 
 .inputWrapper:hover {
-  border-color: rgba(26, 127, 250, 0.3);
+  border-color: rgba(26, 127, 250, 0.5);
 }
 
 .inputWrapper:focus-within {
@@ -85,10 +90,10 @@
   padding: 1.2rem 1rem 1.2rem 3rem;
   border: none;
   font-size: 1.1rem;
-  background-color: var(--secondary-color);
+  background-color: rgba(20, 20, 25, 0.9);
   color: var(--text-color);
   outline: none;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Segoe UI', Arial, Helvetica, 'Poppins', sans-serif;
 }
 
 .searchInput::placeholder {
@@ -180,9 +185,9 @@
   max-width: 600px;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 30px var(--card-shadow);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 100px rgba(0, 108, 228, 0.15);
   background: var(--card-bg);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .cardImage {
@@ -279,6 +284,12 @@
 .resultsContainer {
   width: 100%;
   padding: 1rem 0;
+  background-color: rgba(12, 12, 20, 0.7);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 100px rgba(0, 108, 228, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .resultsHeader {
@@ -317,15 +328,15 @@
 .likedCard {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 15px var(--card-shadow);
-  background-color: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 100px rgba(0, 108, 228, 0.15);
+  background-color: rgba(20, 20, 25, 0.9);
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .likedCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px var(--card-shadow);
+  box-shadow: 0 8px 25px var(--card-shadow), 0 0 20px rgba(0, 108, 228, 0.2);
   border-color: rgba(26, 127, 250, 0.3);
 }
 
@@ -379,7 +390,7 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 108, 228, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 108, 228, 0.4), 0 0 20px rgba(0, 108, 228, 0.2);
   transition: all 0.2s ease;
   letter-spacing: 0.5px;
 }
@@ -387,7 +398,7 @@
 .newSearchBtn:hover {
   background-color: var(--primary-light);
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 108, 228, 0.5);
+  box-shadow: 0 6px 15px rgba(0, 108, 228, 0.5), 0 0 30px rgba(0, 108, 228, 0.3);
 }
 
 /* Ajout d'un badge de prix inspiré de Booking */

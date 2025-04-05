@@ -1,26 +1,81 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Variables pour le mode sombre avec accents bleus booking-style */
+  --bg-color: #061ea5;
+  --text-color: #e8e8e8;
+  --card-bg: #1e1e1e;
+  --card-shadow: rgba(0, 0, 0, 0.4);
+  --primary-color: #006ce4; /* Bleu Booking principal */
+  --primary-light: #1a7ffa; /* Version plus claire pour les hovers */
+  --secondary-color: #2a2a2a;
+  --border-color: #333333;
+  --header-color: #ffffff;
+  --accent-yellow: #feba02; /* Accent jaune de Booking pour certains éléments */
+  --accent-blue-light: #e6f2ff; /* Fond bleu clair pour certains éléments */
+  
+  /* Nouvelles variables pour le dégradé avec délimitation plus nette et couleurs plus vives */
+  --gradient-top: #005cb8;      /* Bleu marine plus vif et visible */
+  --gradient-middle: #003b7e;   /* Bleu marine moyen pour transition */
+  --gradient-bottom: #0c0c14;   /* Noir légèrement bleuté au lieu de noir pur */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html,
+body {
+  padding: 0;
+  margin: 0;
+  /* Ajouter des polices système avant Poppins pour une meilleure compatibilité */
+  font-family: 'Segoe UI', Arial, Helvetica, 'Poppins', -apple-system, BlinkMacSystemFont, Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  color: var(--text-color);
+  letter-spacing: 0.2px;
+  /* Appliquer le dégradé de manière plus claire et s'assurer qu'il couvre tout */
+  background: linear-gradient(to bottom, 
+    var(--gradient-top) 0%, 
+    var(--gradient-top) 40%,        /* Maintenir le bleu marine jusqu'à 40% */
+    var(--gradient-middle) 40.5%,   /* Transition très rapide */
+    var(--gradient-bottom) 41%);    /* Noir à partir de 41% */
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* S'assurer que html et body prennent toute la hauteur disponible */
+html {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ajouter un style pour #__next (l'élément racine de Next.js) pour s'assurer qu'il prend toute la hauteur */
+#__next {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  /* Utiliser les mêmes polices système pour les titres */
+  font-family: 'Segoe UI', Arial, Helvetica, 'Poppins', sans-serif;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+button {
+  /* Utiliser les mêmes polices système pour les boutons */
+  font-family: 'Segoe UI', Arial, Helvetica, 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+* {
+  box-sizing: border-box;
 }
