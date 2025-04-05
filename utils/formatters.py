@@ -3,6 +3,9 @@ Fonctions utilitaires pour formater les sorties
 """
 import json
 
+# SUPPRIMER CETTE LIGNE QUI CAUSE LE PROBLÈME:
+# from utils.formatters import format_as_text, format_as_json
+
 def format_as_text(recommendations):
     """
     Formate les recommandations en texte lisible pour l'utilisateur
@@ -21,9 +24,13 @@ def format_as_text(recommendations):
             
         place_type = place.get('type', 'Non spécifié')
         formatted_text += f"🌟 {i}. {place.get('nom')} - {place_type} - {place.get('quartier')}\n"
-        formatted_text += f"📍 {place.get('adresse', 'Adresse non spécifiée')}\n\n"
+        formatted_text += f"📍 {place.get('adresse', 'Adresse non spécifiée')}\n"
         
-        formatted_text += "✅ Points positifs:\n"
+        # Afficher l'URL de l'image si disponible
+        if place.get('url_image'):
+            formatted_text += f"🖼️ Image: {place.get('url_image')}\n"
+        
+        formatted_text += "\n✅ Points positifs:\n"
         for point in place.get('points_positifs', []):
             formatted_text += f"  • {point}\n"
         
