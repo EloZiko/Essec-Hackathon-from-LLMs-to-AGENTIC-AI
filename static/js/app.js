@@ -108,19 +108,33 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.like-btn').addEventListener('click', function() {
         if (currentRecommendations.length === 0) return;
         
+        // Animation de swipe à droite
+        const recommendationCard = document.querySelector('.recommendation-card');
+        recommendationCard.classList.add('swipe-right');
+        
         // Ajouter à la liste des recommandations aimées
         likedRecommendations.push(currentRecommendations[currentIndex]);
         
-        // Passer à la recommandation suivante
-        nextRecommendation();
+        // Attendre que l'animation soit terminée avant de passer à la suivante
+        setTimeout(() => {
+            recommendationCard.classList.remove('swipe-right');
+            nextRecommendation();
+        }, 500); // 500ms correspond à la durée de l'animation CSS
     });
     
     // Gérer le clic sur "Je n'aime pas"
     document.querySelector('.dislike-btn').addEventListener('click', function() {
         if (currentRecommendations.length === 0) return;
         
-        // Simplement passer à la recommandation suivante
-        nextRecommendation();
+        // Animation de swipe à gauche
+        const recommendationCard = document.querySelector('.recommendation-card');
+        recommendationCard.classList.add('swipe-left');
+        
+        // Attendre que l'animation soit terminée avant de passer à la suivante
+        setTimeout(() => {
+            recommendationCard.classList.remove('swipe-left');
+            nextRecommendation();
+        }, 500); // 500ms correspond à la durée de l'animation CSS
     });
     
     // Passer à la recommandation suivante
@@ -167,4 +181,32 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('prompt').value = '';
         document.getElementById('prompt').focus();
     });
+    
+    // Ajouter la gestion des swipes tactiles pour les appareils mobiles
+    const recommendationCard = document.querySelector('.recommendation-card');
+    if (recommendationCard) {
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        recommendationCard.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        recommendationCard.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                // Swipe à gauche
+                document.querySelector('.dislike-btn').click();
+            }
+            
+            if (touchEndX > touchStartX + 50) {
+                // Swipe à droite
+                document.querySelector('.like-btn').click();
+            }
+        }
+    }
 });

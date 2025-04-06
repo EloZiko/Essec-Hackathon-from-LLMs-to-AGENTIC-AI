@@ -161,6 +161,7 @@ body {
 
 .recommendation-card {
     transition: all 0.3s ease;
+    transform-origin: center;
 }
 
 .card {
@@ -175,6 +176,7 @@ body {
 .recommendation-name {
     color: #2575fc;
     font-weight: bold;
+    font-size: 24px;
 }
 
 .list-group-item {
@@ -232,6 +234,25 @@ body {
 .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations de swipe */
+@keyframes swipeRight {
+    0% { transform: translateX(0); opacity: 1; }
+    100% { transform: translateX(150%); opacity: 0; }
+}
+
+@keyframes swipeLeft {
+    0% { transform: translateX(0); opacity: 1; }
+    100% { transform: translateX(-150%); opacity: 0; }
+}
+
+.swipe-right {
+    animation: swipeRight 0.5s ease forwards;
+}
+
+.swipe-left {
+    animation: swipeLeft 0.5s ease forwards;
 }
 
 @media (max-width: 768px) {
@@ -354,19 +375,33 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.like-btn').addEventListener('click', function() {
         if (currentRecommendations.length === 0) return;
         
+        // Animation de swipe à droite
+        const recommendationCard = document.querySelector('.recommendation-card');
+        recommendationCard.classList.add('swipe-right');
+        
         // Ajouter à la liste des recommandations aimées
         likedRecommendations.push(currentRecommendations[currentIndex]);
         
-        // Passer à la recommandation suivante
-        nextRecommendation();
+        // Attendre que l'animation soit terminée avant de passer à la suivante
+        setTimeout(() => {
+            recommendationCard.classList.remove('swipe-right');
+            nextRecommendation();
+        }, 500); // 500ms correspond à la durée de l'animation CSS
     });
     
     // Gérer le clic sur "Je n'aime pas"
     document.querySelector('.dislike-btn').addEventListener('click', function() {
         if (currentRecommendations.length === 0) return;
         
-        // Simplement passer à la recommandation suivante
-        nextRecommendation();
+        // Animation de swipe à gauche
+        const recommendationCard = document.querySelector('.recommendation-card');
+        recommendationCard.classList.add('swipe-left');
+        
+        // Attendre que l'animation soit terminée avant de passer à la suivante
+        setTimeout(() => {
+            recommendationCard.classList.remove('swipe-left');
+            nextRecommendation();
+        }, 500); // 500ms correspond à la durée de l'animation CSS
     });
     
     // Passer à la recommandation suivante
@@ -413,17 +448,38 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('prompt').value = '';
         document.getElementById('prompt').focus();
     });
+    
+    // Ajouter la gestion des swipes tactiles pour les appareils mobiles
+    const recommendationCard = document.querySelector('.recommendation-card');
+    if (recommendationCard) {
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        recommendationCard.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        recommendationCard.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                // Swipe à gauche
+                document.querySelector('.dislike-btn').click();
+            }
+            
+            if (touchEndX > touchStartX + 50) {
+                // Swipe à droite
+                document.querySelector('.like-btn').click();
+            }
+        }
+    }
 });
 """)
 
-# Service de recommandations
-service = RecommendationService()
-
-@app.route('/')
-def index():
-    """Page d'accueil de l'application"""
-    return render_template('index.html', default_location=DEFAULT_LOCATION)
-
+# Modifie la fonction get_recommendations pour utiliser des noms d'activités au lieu de "Recommandation X"
 @app.route('/api/recommendations', methods=['POST'])
 def get_recommendations():
     """API pour obtenir des recommandations"""
@@ -473,11 +529,38 @@ def get_recommendations():
                     recommendations = []
         
         for i, rec in enumerate(recommendations):
-            print(f"Traitement recommandation {i+1}: {rec.get('name', 'Sans nom')}")
+            # Rechercher le nom dans différents champs possibles
+            name_keys = ['name', 'lieu', 'place', 'location', 'title', 'nom', 'establishment', 'activity']
+            
+            name = None
+            for key in name_keys:
+                if key in rec and rec[key]:
+                    name = rec[key]
+                    break
+            
+            # Si aucun nom n'a été trouvé, essayer d'extraire d'une description
+            if not name and 'description' in rec:
+                description = rec['description']
+                if isinstance(description, str) and description.strip():
+                    words = description.split()
+                    name = ' '.join(words[:4]) + '...'
+            
+            # Si toujours pas de nom, utiliser l'activité du prompt
+            if not name:
+                activities = [
+                    word for word in user_prompt.split() 
+                    if len(word) > 3 and word.lower() not in ['avec', 'pour', 'dans', 'chez', 'comment']
+                ]
+                if activities:
+                    name = f"{activities[0].capitalize()} à {location}"
+                else:
+                    name = f"Lieu recommandé à {location}"
+            
+            print(f"Traitement recommandation {i+1}: {name}")
             
             # S'assurer que chaque recommandation a les champs nécessaires
             clean_rec = {
-                'name': rec.get('name', f'Recommandation {i+1}'),
+                'name': name,
                 'positives': [],
                 'negatives': []
             }
@@ -545,7 +628,7 @@ def get_recommendations():
         if not clean_recommendations:
             print("Aucune recommandation valide, création d'une recommandation par défaut")
             clean_recommendations = [{
-                'name': f"Suggestion pour {location}",
+                'name': f"Activité à {location}",
                 'positives': ["Recommandation basée sur votre recherche"],
                 'negatives': ["Pas d'informations détaillées disponibles"]
             }]
@@ -567,8 +650,14 @@ def get_recommendations():
             'status': 'error',
             'message': f"Une erreur est survenue: {str(e)}"
         }), 500
-        
-# Ajouter à la fin du fichier:
+
+# Service de recommandations
+service = RecommendationService()
+
+@app.route('/')
+def index():
+    """Page d'accueil de l'application"""
+    return render_template('index.html', default_location=DEFAULT_LOCATION)
 
 if __name__ == "__main__":
     print("Serveur lancé sur http://127.0.0.1:5000")
