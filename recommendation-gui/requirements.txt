@@ -1,0 +1,6 @@
+Flask
+tkinter
+requests
+json
+Pillow
+framer-motion
