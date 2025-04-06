@@ -8,6 +8,8 @@ import traceback
 from main import RecommendationService
 from config.settings import DEFAULT_LOCATION
 
+
+
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Clé pour la session
 
@@ -40,7 +42,7 @@ with open("templates/index.html", "w", encoding="utf-8") as f:
         <div class="header">
             <div class="container py-4">
                 <h1 class="text-white text-center mb-0">
-                    <i class="fas fa-map-marker-alt"></i> Recommandations de Sorties
+                    <i class="fas fa-map-marker-alt"></i> Tripify
                 </h1>
             </div>
         </div>
@@ -591,14 +593,18 @@ def get_recommendations():
                             clean_rec['positives'] = [str(positives)]
                             break
             
+
+
             # Vérifier et formater les points négatifs
             if 'negatives' in rec:
                 negatives = rec['negatives']
                 if isinstance(negatives, list):
                     clean_rec['negatives'] = negatives
                 elif isinstance(negatives, str):
+                    # Si c'est une chaîne unique, la transformer en liste
                     clean_rec['negatives'] = [negatives]
                 else:
+                    # Pour tout autre type, convertir en chaîne
                     clean_rec['negatives'] = [str(negatives)]
             else:
                 # Chercher d'autres clés possibles
@@ -615,11 +621,106 @@ def get_recommendations():
                             clean_rec['negatives'] = [str(negatives)]
                             break
             
+            # S'assurer qu'il y a au moins un point positif
+            if not clean_rec['positives']:
+                clean_rec['positives'] = ["Information non disponible"]
+            
+            # Générer des points négatifs contextuels si aucun n'a été trouvé
+            if not clean_rec['negatives']:
+                # Rechercher des mots-clés dans le nom ou les points positifs
+                name_lower = clean_rec['name'].lower()
+                pos_text = ' '.join([p.lower() for p in clean_rec['positives']])
+                combined_text = name_lower + ' ' + pos_text + ' ' + user_prompt.lower()
+                
+                # Définir plusieurs catégories d'établissements
+                categories = {
+                    'restaurant': ['restaurant', 'bistro', 'brasserie', 'pizzeria', 'cuisine', 'manger', 'dîner', 'déjeuner'],
+                    'bar': ['bar', 'pub', 'cocktail', 'boire', 'alcool', 'bière', 'vin'],
+                    'café': ['café', 'salon de thé', 'brunch', 'petit déjeuner'],
+                    'musée': ['musée', 'exposition', 'galerie', 'art', 'culture', 'histoire'],
+                    'shopping': ['magasin', 'boutique', 'shopping', 'acheter', 'centre commercial'],
+                    'parc': ['parc', 'jardin', 'nature', 'plein air', 'promenade'],
+                    'cinéma': ['cinéma', 'film', 'ciné', 'théâtre', 'spectacle', 'concert'],
+                    'club': ['club', 'boîte de nuit', 'boîte', 'discothèque', 'danser', 'danse'],
+                    'activité': ['activité', 'sport', 'jeu', 'escape game', 'bowling', 'karting', 'laser game']
+                }
+                
+                # Identifier la catégorie
+                category = None
+                for cat, keywords in categories.items():
+                    if any(keyword in combined_text for keyword in keywords):
+                        category = cat
+                        break
+                
+                # Générer des points négatifs spécifiques à la catégorie
+                if category == 'restaurant':
+                    clean_rec['negatives'] = [
+                        "Peut être bruyant en période d'affluence",
+                        "Réservation conseillée le week-end",
+                        "Prix un peu élevés par rapport à d'autres établissements similaires"
+                    ]
+                elif category == 'bar':
+                    clean_rec['negatives'] = [
+                        "Peut être bondé en soirée et le week-end",
+                        "Musique parfois forte, rendant les conversations difficiles",
+                        "Sélection de boissons sans alcool limitée"
+                    ]
+                elif category == 'café':
+                    clean_rec['negatives'] = [
+                        "Peu de places assises aux heures de pointe",
+                        "Connexion Wi-Fi parfois instable",
+                        "Ferme relativement tôt en soirée"
+                    ]
+                elif category == 'musée':
+                    clean_rec['negatives'] = [
+                        "Affluence importante pendant les vacances scolaires",
+                        "Certaines expositions temporaires en supplément",
+                        "Peut demander plusieurs heures pour une visite complète"
+                    ]
+                elif category == 'shopping':
+                    clean_rec['negatives'] = [
+                        "Prix généralement plus élevés que la moyenne",
+                        "Forte affluence le samedi après-midi",
+                        "Peu d'espaces de repos pendant le shopping"
+                    ]
+                elif category == 'parc':
+                    clean_rec['negatives'] = [
+                        "Expérience dépendante des conditions météorologiques",
+                        "Peu d'abris en cas d'intempéries",
+                        "Certaines zones peuvent être fermées en période d'entretien"
+                    ]
+                elif category == 'cinéma':
+                    clean_rec['negatives'] = [
+                        "Prix des places plus élevés que la moyenne",
+                        "Files d'attente possibles pour les blockbusters",
+                        "Confiseries et boissons onéreuses"
+                    ]
+                elif category == 'club':
+                    clean_rec['negatives'] = [
+                        "Entrée parfois coûteuse ou sélective",
+                        "Très bruyant, pas idéal pour discuter",
+                        "Files d'attente longues après minuit"
+                    ]
+                elif category == 'activité':
+                    clean_rec['negatives'] = [
+                        "Réservation nécessaire pendant les périodes d'affluence",
+                        "Peut être coûteux pour les groupes",
+                        "Temps d'attente parfois long entre les sessions"
+                    ]
+                else:
+                    # Points négatifs génériques mais contextuels à la ville
+                    clean_rec['negatives'] = [
+                        f"Accès parfois difficile aux heures de pointe à {location}",
+                        "Qualité du service variable selon l'affluence",
+                        "Peut ne pas convenir à tous les goûts ou préférences"
+                    ]
+            
             # S'assurer qu'il y a au moins un point positif et négatif
             if not clean_rec['positives']:
                 clean_rec['positives'] = ["Information non disponible"]
             
             if not clean_rec['negatives']:
+                # Utiliser un message simple au lieu d'une liste vide
                 clean_rec['negatives'] = ["Information non disponible"]
                 
             clean_recommendations.append(clean_rec)

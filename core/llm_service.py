@@ -54,14 +54,19 @@ class MistralService:
             ],
             "points_negatifs": [
               "Point négatif 1 (horaires, affluence, prix, etc.)",
-              "Point négatif 2"
+              "Point négatif 2",
+              "Point négatif 3"
             ]
           }},
           // Et ainsi de suite pour les autres lieux
         ]
         ```
         
-        Inclus 3-4 points positifs et 2 points négatifs spécifiques pour chaque lieu.
+        ATTENTION: Tu dois OBLIGATOIREMENT inclure EXACTEMENT 3 points négatifs pour chaque lieu recommandé.
+        Ces points négatifs peuvent inclure: prix élevés, affluence à certaines heures, bruit, limitations d'accès, 
+        problèmes de stationnement, contraintes d'horaires, etc.
+        
+        Inclus 3-4 points positifs et TOUJOURS 3 points négatifs spécifiques pour chaque lieu.
         N'invente pas de lieux - ne recommande que des endroits authentiques qui existent réellement à {location} en 2025.
         IMPORTANT: Retourne UNIQUEMENT le JSON valide, sans aucun texte d'introduction ou de conclusion.
         """
@@ -76,7 +81,7 @@ class MistralService:
         Returns:
             str: Message système
         """
-        return f"Tu es un expert local de {location} qui connaît parfaitement tous les bars, restaurants et lieux de sortie. Tu réponds UNIQUEMENT au format JSON demandé, sans aucun texte supplémentaire. Tu fournis un JSON parfaitement valide qui peut être parsé directement."
+        return f"Tu es un expert local de {location} qui connaît parfaitement tous les bars, restaurants et lieux de sortie. Tu réponds UNIQUEMENT au format JSON demandé, sans aucun texte supplémentaire. Tu fournis un JSON parfaitement valide qui peut être parsé directement. IMPORTANT: Tu dois ABSOLUMENT inclure EXACTEMENT 3 points négatifs pour chaque lieu recommandé."
     
     def generate_recommendations(self, user_prompt, location="Paris"):
         """
@@ -112,7 +117,28 @@ class MistralService:
             # Parser et valider le JSON
             try:
                 recommendations = json.loads(json_content)
-                return Recommendation.validate_json(recommendations)
+                recommendations = Recommendation.validate_json(recommendations)
+                
+                # Vérifier que chaque recommandation a exactement 3 points négatifs
+                for rec in recommendations:
+                    data = rec
+                    if isinstance(rec, Recommendation):
+                        data = rec.to_dict()
+                    
+                    # S'assurer qu'il y a des points négatifs
+                    if 'points_negatifs' not in data or not data['points_negatifs']:
+                        data['points_negatifs'] = []
+                    
+                    # S'assurer qu'il y a exactement 3 points négatifs
+                    while len(data['points_negatifs']) < 3:
+                        if len(data['points_negatifs']) == 0:
+                            data['points_negatifs'].append(f"Peut être bondé aux heures de pointe")
+                        elif len(data['points_negatifs']) == 1:
+                            data['points_negatifs'].append(f"Prix parfois plus élevés que la moyenne")
+                        elif len(data['points_negatifs']) == 2:
+                            data['points_negatifs'].append(f"Accessibilité peut être limitée à certaines heures")
+                
+                return recommendations
             except json.JSONDecodeError:
                 return [Recommendation.create_error(f"Format JSON invalide dans la réponse")]
                 
