@@ -15,20 +15,20 @@ class RecommendationService:
     
     def get_recommendations(self, user_prompt, location=DEFAULT_LOCATION):
         """
-        Obtient des recommandations de lieux
+        Obtient des recommandations de lieux sous forme d'itinéraire
         
         Args:
             user_prompt (str): Requête utilisateur
             location (str): Ville pour les recommandations
             
         Returns:
-            list: Liste de dictionnaires de recommandations
+            dict: Dictionnaire avec itinéraire structuré (matin, midi, après-midi, soir)
         """
-        return self.mistral_service.generate_recommendations(user_prompt, location)
+        return self.mistral_service.generate_itinerary(user_prompt, location)
     
     def get_formatted_recommendations(self, user_prompt, output_format="json", location=DEFAULT_LOCATION):
         """
-        Obtient des recommandations formatées
+        Obtient des recommandations formatées sous forme d'itinéraire
         
         Args:
             user_prompt (str): Requête utilisateur
@@ -36,14 +36,16 @@ class RecommendationService:
             location (str): Ville pour les recommandations
             
         Returns:
-            str: Recommandations formatées selon le format demandé
+            str: Itinéraire formaté selon le format demandé
         """
-        recommendations = self.get_recommendations(user_prompt, location)
+        itinerary = self.get_recommendations(user_prompt, location)
         
         if output_format == "json":
-            return format_as_json(recommendations)
+            return format_as_json(itinerary)
         else:
-            return format_as_text(recommendations)
+            return format_as_text(itinerary)
+
+# ...existing code...
 
 def main():
     """Point d'entrée principal pour l'interface en ligne de commande"""
