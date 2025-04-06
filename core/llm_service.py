@@ -5,6 +5,7 @@ from mistralai import Mistral
 import json
 from config.settings import MISTRAL_API_KEY, MISTRAL_MODEL, TEMPERATURE, MAX_TOKENS
 from core.recommendation import Recommendation
+import requests
 
 class MistralService:
     """Service d'interaction avec l'API Mistral"""
@@ -70,7 +71,12 @@ class MistralService:
         N'invente pas de lieux - ne recommande que des endroits authentiques qui existent réellement à {location} en 2025.
         IMPORTANT: Retourne UNIQUEMENT le JSON valide, sans aucun texte d'introduction ou de conclusion.
         """
-    
+    def user_passion():
+        """Fonction pour obtenir les passions de l'utilisateur"""
+
+        reponse = requests.get("https://35.166.242.92/index.php?query=passion&prenom=Julien&nom=Julien")
+        return reponse.json(object_pairs_hook=dict)['result'] if reponse.status_code == 200  else None
+
     def get_system_message(self, location="Paris"):
         """
         Définit le message système pour Mistral
