@@ -1,0 +1,113 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  padding: 2rem;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.card {
+  background: #2a2a2a;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 600px;
+}
+
+.imageContainer {
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.question {
+  font-size: 1.2rem;
+  color: #cccccc;
+  margin-bottom: 1.5rem;
+}
+
+.starsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.starButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  padding: 0.2rem;
+  transition: transform 0.2s;
+}
+
+.starButton:hover {
+  transform: scale(1.1);
+}
+
+.star.filled {
+  color: #ffd700;
+}
+
+.star.empty {
+  color: #444444;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: 2px solid #404040;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  resize: vertical;
+  background: #333333;
+  color: #ffffff;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  background: #2c5282;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background: #2b4c7e;
+}
+
+.thankYouContainer {
+  text-align: center;
+  padding: 2rem;
+}
+
+.thumbIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.thankYouText {
+  font-size: 1.5rem;
+  color: #ffffff;
+  font-weight: 500;
+}
